@@ -1,4 +1,5 @@
 from selenium import webdriver
+from features import environment
 import time
 from behave import *
 from selenium.webdriver.common.by import By
@@ -11,9 +12,12 @@ from functions.functionAuxiliar import (
 @given('Que estoy en la página de login')
 def step_impl(context):
     try:
-        context.driver = webdriver.Chrome()
+        #selenium_uri = "http://172.17.0.3:4444"
+        #context.driver = webdriver.Remote(command_executor=selenium_uri,desired_capabilities={})
         context.driver.get("https://www.saucedemo.com/")
-        capture_screenshot(context,'Login')
+        #context.driver = webdriver.Chrome()
+        #context.driver.get("https://www.saucedemo.com/")
+        #capture_screenshot(context,'Login')
         time.sleep(2)
     except Exception as e:
         print("Error:", e)
@@ -32,7 +36,7 @@ def step_impl(context, username, pwd):
             EC.presence_of_element_located((By.ID, "password"))
         )
         element.send_keys(pwd)
-        capture_screenshot(context,'Ingreso de credenciales')
+        #capture_screenshot(context,'Ingreso de credenciales')
     except Exception as e:
         print("Error:", e)
 
@@ -48,6 +52,6 @@ def step_impl(context):
 
 @then('Se muestra la página principal')
 def step_impl(context):
-    capture_screenshot(context,'Menu')
+    #capture_screenshot(context,'Menu')
     time.sleep(2)
     context.driver.close()
