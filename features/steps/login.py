@@ -12,46 +12,48 @@ from functions.functionAuxiliar import (
 @given('Que estoy en la página de login')
 def step_impl(context):
     try:
-        #selenium_uri = "http://172.17.0.3:4444"
-        #context.driver = webdriver.Remote(command_executor=selenium_uri,desired_capabilities={})
-        context.driver.get("https://www.saucedemo.com/")
-        #context.driver = webdriver.Chrome()
-        #context.driver.get("https://www.saucedemo.com/")
-        capture_screenshot(context,'Login')
+        # Abre la página de login en los tres navegadores
+        for browser_name, driver in context.driver.items():
+            driver.get("https://www.saucedemo.com/")
+            capture_screenshot(context, f'Login_{browser_name}')
         time.sleep(2)
     except Exception as e:
         print("Error:", e)
-    
-    
 
 @when('Ingreso mis credenciales válidas "{username}" "{pwd}"')
 def step_impl(context, username, pwd):
     try:
-        element = WebDriverWait(context.driver, 10).until(
-            EC.presence_of_element_located((By.ID, "user-name"))
-        )
-        element.send_keys(username)
+        for browser_name, driver in context.driver.items():
+            element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, "user-name"))
+            )
+            element.send_keys(username)
 
-        element = WebDriverWait(context.driver, 10).until(
-            EC.presence_of_element_located((By.ID, "password"))
-        )
-        element.send_keys(pwd)
-        capture_screenshot(context,'Ingreso de credenciales')
+            element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, "password"))
+            )
+            element.send_keys(pwd)
+            capture_screenshot(context, f'Ingreso_de_credenciales_{browser_name}')
     except Exception as e:
         print("Error:", e)
 
 @when('Hago click en el botón de inicio de sesión')
 def step_impl(context):
     try:
-        element = WebDriverWait(context.driver, 10).until(
-            EC.element_to_be_clickable((By.ID, "login-button"))
-        )
-        element.click()
+        for browser_name, driver in context.driver.items():
+            element = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.ID, "login-button"))
+            )
+            element.click()
     except Exception as e:
         print("Error:", e)
 
 @then('Se muestra la página principal')
 def step_impl(context):
-    capture_screenshot(context,'Menu')
-    time.sleep(2)
-    context.driver.close()
+    try:
+        for browser_name, driver in context.driver.items():
+            capture_screenshot(context, f'Menu_{browser_name}')
+            time.sleep(2)
+            driver.close()
+    except Exception as e:
+        print("Error:", e)
