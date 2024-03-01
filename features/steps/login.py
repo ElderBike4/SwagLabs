@@ -12,7 +12,7 @@ from functions.functionAuxiliar import (
 @given('Que estoy en la página de login')
 def step_impl(context):
     try:
-        # Abre la página de login en los tres navegadores
+        
         for browser_name, driver in context.driver.items():
             driver.get("https://www.saucedemo.com/")
             capture_screenshot(context, f'Login_{browser_name}')

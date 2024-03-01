@@ -1,10 +1,9 @@
 from selenium import webdriver
 
 def before_all(context):
-    # Configura la URI de Selenium Grid en el contenedor Docker
+    # URI de selenium GRID
     selenium_uri = "http://localhost:4444"
     
-    # Inicializa el controlador del navegador
 
     chrome_options = webdriver.ChromeOptions()
     context.chrome_driver = webdriver.Remote(command_executor=selenium_uri,
@@ -23,7 +22,7 @@ def before_all(context):
     }
 
 def after_all(context):
-    # Cierra el controlador del navegador
+    
     context.chrome_driver.quit()
     context.firefox_driver.quit()
     context.edge_driver.quit()
