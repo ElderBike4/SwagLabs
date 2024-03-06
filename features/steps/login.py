@@ -12,11 +12,17 @@ from functions.functionAuxiliar import (
 @given('Que estoy en la página de login')
 def step_impl(context):
     try:
-        
         for browser_name, driver in context.driver.items():
             driver.get("https://www.saucedemo.com/")
+            botones = driver.find_elements(By.ID,"login-button")
+            if botones:
+                print("El boton de login existe")
+            else:
+                raise AssertionError("El botón no existe en la página.")
             capture_screenshot(context, f'Login_{browser_name}')
         time.sleep(2)
+    except AssertionError as ae:
+        raise ae  
     except Exception as e:
         print("Error:", e)
 
@@ -53,7 +59,14 @@ def step_impl(context):
     try:
         for browser_name, driver in context.driver.items():
             capture_screenshot(context, f'Menu_{browser_name}')
+            if driver.title!="Swag Labs":
+                raise AssertionError("El titulo de la pagina no es el esperado")
+            if driver.current_url != "https://www.saucedemo.com/inventory.html":
+                raise AssertionError("La URL actual no coincide con la esperada.")
+            print('Captura realizada')
             time.sleep(2)
             driver.close()
+    except AssertionError as ae:
+        raise ae  
     except Exception as e:
         print("Error:", e)
